@@ -1,8 +1,8 @@
 package pl.sda.List;
 
-public class LinkedList implements IList {
-    private Node first;
-    private Node last;
+public class LinkedList<T> implements IList<T> {
+    private Node<T> first;
+    private Node<T> last;
     private int size = 0;
 
 
@@ -18,10 +18,10 @@ public class LinkedList implements IList {
     }
 
     @Override
-    public long get(int index) {
+    public T get(int index) {
         checkBounds(index);
 
-        Node tmp = first;
+        Node <T> tmp = first;
         for (int i = 0; i < index; i++) {
             tmp = tmp.getNext();
         }
@@ -30,17 +30,17 @@ public class LinkedList implements IList {
 
 
     @Override
-    public void set(int index, long value) {
+    public void set(int index, T value) {
 
 
        checkBounds(index);
-       Node tmp = getNodeFromIdex(index);
+       Node <T> tmp = getNodeFromIdex(index);
        tmp.setValue(value);
 
     }
 
-    private Node getNodeFromIdex(int index) {
-        Node tmp = first;
+    private Node<T> getNodeFromIdex(int index) {
+        Node<T> tmp = first;
         for (int i = 0; i < index; i++) {
             tmp = tmp.getNext();
         }
@@ -52,9 +52,9 @@ public class LinkedList implements IList {
     @Override
     public void remove(int index) {
         checkBounds(index);
-        Node removeingNode = getNodeFromIdex(index);
-        Node prev = removeingNode.getPrev();
-        Node next = removeingNode.getNext();
+        Node<T> removeingNode = getNodeFromIdex(index);
+        Node<T> prev = removeingNode.getPrev();
+        Node<T> next = removeingNode.getNext();
         prev.setNext(next);
         next.setPrev(prev);
         if (index != 0)
@@ -72,9 +72,9 @@ public class LinkedList implements IList {
     }
 
     @Override
-    public int firstIndexWith(long value) {
+    public int firstIndexWith(T value) {
         int index = 0;
-        Node tmp = first;
+        Node<T> tmp = first;
         while (tmp != null) {
             if (tmp.getValue() == value) {
                 return index;
@@ -86,11 +86,11 @@ public class LinkedList implements IList {
     }
 
     @Override
-    public void add(long value) {
+    public void add(T value) {
         if (size == 0) {
             last = first = new Node(value);
         } else {
-            Node next = new Node(value);
+            Node<T> next = new Node(value);
             last.setNext(next);
             next.setPrev(last);
             last = next;
@@ -99,14 +99,14 @@ public class LinkedList implements IList {
     }
 
     @Override
-    public void add(int index, long value) {
+    public void add(int index, T value) {
         checkInsertBounds(index);
         if (size == 0 || index == size) {
             add(value);
             return;
         }
 
-        Node tmpPrev = first;
+        Node<T> tmpPrev = first;
         for (int i = 0; i < index; i++) {
             tmpPrev = tmpPrev.getNext();
         }
@@ -114,10 +114,10 @@ public class LinkedList implements IList {
         insertBetween(tmpPrev, value);
     }
 
-    private void insertBetween(Node replaced, long value) {
-        Node newNode = new Node(value);
+    private void insertBetween(Node replaced, T value) {
+        Node<T> newNode = new Node(value);
 
-        Node beforeReplaced = replaced.getPrev();
+        Node<T> beforeReplaced = replaced.getPrev();
         //No node before replaced this means that replaced was first node!
         //Now 'first' must point to the newNode we inserted
         if (beforeReplaced == null) {
@@ -133,10 +133,10 @@ public class LinkedList implements IList {
     }
 
     @Override
-    public long[] getHolderView() {
-        long[] longs = new long[size];
+    public T[] getHolderView() {
+        T[] longs = (T[]) new Object [size];
         int index = 0;
-        Node tmp = first;
+        Node<T> tmp = first;
         while (tmp != null) {
             longs[index++] = tmp.getValue();
             tmp = tmp.getNext();
